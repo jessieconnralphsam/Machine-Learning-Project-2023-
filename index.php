@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leaf Disease | Detection</title>
     <link rel="stylesheet" href="style.css?v=2">
+    <script src="js/main.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
@@ -29,7 +30,7 @@
         <div class="typing-field">
             <div class="input-data">
                 <input id="data" type="file" accept="image/*">
-                <!-- camera scan here-->
+                <video id="videoElement" autoplay></video>
                 <button id="send-btn">check</button>
             </div>
         </div>
