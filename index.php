@@ -22,7 +22,7 @@
                     <i class="fas fa-robot"></i>
                 </div>
                 <div class="msg-header">
-                    <p>Hello there, upload <br> image below</p>
+                    <p>Hello there, upload or scan <br> image below</p>
                 </div>
             </div>
         </div>
