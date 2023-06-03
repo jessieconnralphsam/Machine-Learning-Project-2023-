@@ -1,3 +1,8 @@
+
+<?php
+    //db connection
+    require_once 'connection.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,6 +29,7 @@
         <div class="typing-field">
             <div class="input-data">
                 <input id="data" type="file" accept="image/*">
+                <!-- camera scan here-->
                 <button id="send-btn">check</button>
             </div>
         </div>
