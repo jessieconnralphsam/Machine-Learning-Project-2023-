@@ -30,6 +30,7 @@
         <div class="typing-field">
             <div class="input-data">
                 <input id="data" type="file" accept="image/*">
+                <!-- <video id="videoElement" autoplay></video> -->
                 <!--camera here -->
                 <button id="send-btn">check</button>
             </div>
