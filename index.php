@@ -37,7 +37,8 @@
       <div class="modal-body">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id='submit' onclick="$('#uni_modal form').submit();predict();">Save</button>
+        <!-- <button type="button" class="btn btn-primary" id='submit' onclick="$('#uni_modal form').submit();predict();">Save</button> -->
+        <button type="button" class="btn btn-primary" id='submit' onclick="predict(); setTimeout(function() { $('#uni_modal form').submit(); }, 3000);">Save</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
       </div>
       </div>

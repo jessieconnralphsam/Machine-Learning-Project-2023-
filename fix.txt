@@ -1,0 +1,6 @@
+file to fix:
+
+view_img.php
+teacheable.php
+index.php
+header.php

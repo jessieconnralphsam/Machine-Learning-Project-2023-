@@ -16,7 +16,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 </style>
 <div class="container-fluid">
     <div class="w-100 d-flex justify-content-between">
-        <h4><b><?php echo $original_name ?></b></h4>
+        <!-- <h4><b><?php echo $original_name ?></b></h4> -->
         <a href="#" data-dismiss='modal' class="text-dark"><i class="fa fa-times"></i></a>
     </div>
 </div>
@@ -27,5 +27,6 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
         <h1>Name of disease</h1>
         <h5>infos here</h5>
         <p>cause,cure etc. here</p>
+        <?php echo validate_image($path_name) ?>
     </div>
 </div>
