@@ -30,31 +30,53 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <a href="#" data-dismiss='modal' class="text-dark"><i class="fa fa-times"></i></a>
     </div>
 </div>
-<div class="container-fluid bg-dark" >
-    <div id="img-holder" class='w-100'>
+<div class="container-fluid bg-dark" > <!-- or bg-white -->
+    <div id="img-holder" class='w-100'> 
         <img src="<?php echo validate_image($path_name) ?>" alt="img" loading="lazy" class="w-100 view-img" id="view-img">
         <!-- echo specific data here -->
         <?php if (isset($name)): ?>
-            <h1 style="font-size: 20px;">Name: <?php echo $name; ?></h1>
+            <h3>Plant Name: <?php echo $name; ?></h3>
         <?php endif; ?>
         <?php if (isset($disease)): ?>
-            <h5>Disease: <?php echo $disease; ?></h5>
+            <h3>Disease: <?php echo $disease; ?></h3>
         <?php endif; ?>
+        <br>
         <?php if (isset($description)): ?>
-            <h5 style="font-size: 10px;">Description: <?php echo $description; ?></h5>
+            <h4>Description:</h4>
+            <div style="text-align: justify;">
+                <?php echo $description; ?>
+            </div>
         <?php endif; ?>
+        <br>
         <?php if (isset($effects)): ?>
-            <h5 style="font-size: 10px;">Effects: <?php echo $effects; ?></h5>
+            <h4>Effects: </h4>
+            <div style="text-align: justify;">
+                <?php echo $effects; ?>
+            </div>
         <?php endif; ?>
+        <br>
         <?php if (isset($cause)): ?>
-            <h5 style="font-size: 10px;">Cause: <?php echo $cause; ?></h5>
+            <h4>Cause: </h4>
+            <div style="text-align: justify;">
+                <?php echo $cause; ?>
+            </div>
+        <br>
         <?php endif; ?>
         <?php if (isset($medicine)): ?>
-            <h5 style="font-size: 10px;">Medicine: <?php echo $medicine; ?></h5>
+            <h4>Medicine: </h4>
+            <div style="text-align: justify;">
+                <?php echo $medicine; ?>
+            </div>
+        <br>
         <?php endif; ?>
         <?php if (isset($prevention)): ?>
-            <h5 style="font-size: 10px;">Prevention: <?php echo $prevention; ?></h5>
+            <h4>Prevention: </h4>
+            <div style="text-align: justify;">
+                <?php echo $prevention; ?>
+            </div>
         <?php endif; ?>
+        <br>
+        <br>
         <?php if (isset($link)): ?>
             <h5 style="font-size: 10px;">Source: <a href="<?php echo $link; ?>" target="_blank"><?php echo $link; ?></a></h5>
         <?php endif; ?>

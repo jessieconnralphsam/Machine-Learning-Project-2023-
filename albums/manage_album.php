@@ -14,7 +14,7 @@ if(isset($_GET['id']) && $_GET['id'] > 0){
 		<input type="hidden" name ="id" value="<?php echo isset($id) ? $id : '' ?>">
 		<input type="hidden" name ="user_id" value="<?php echo $_settings->userdata('id') ?>">
 		<div class="form-group">
-			<label for="name" class="control-label">Album Name</label>
+			<label for="name" class="control-label">Plant</label>
 			<input name="name" id="" autofocus class="form-control form no-resize" value="<?php echo isset($name) ? $name : ''; ?>" />
 		</div>
 		</div>

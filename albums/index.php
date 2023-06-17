@@ -4,7 +4,7 @@
 </script>
 <?php endif;?>
 <div class="w-100 d-flex justify-content-between border-bottom py-2">
-	<h3>Albums</h3>
+	<h3>Plants</h3>
 	<button class="btn btn-flat btn-primary" type="button" id="add-new"><i class="fa fa-plus"></i> Add New</button>
 </div>
 <div class="row row-cols-4 row-cols-md-3 row-cols-sm-1 row-cols-lg-4 py-2">
@@ -45,7 +45,7 @@
 	<?php endwhile; ?>
 </div>
 <div class="row">
-    <div class="w-100 p-2 text-center" id="nData" style="display:none"><b>No Album Listed</b></div>
+    <div class="w-100 p-2 text-center" id="nData" style="display:none"><b>No Group of Plants Listed</b></div>
 </div>
 <script>
 	$(document).ready(function(){
