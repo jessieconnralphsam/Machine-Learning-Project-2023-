@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2023 at 08:19 PM
+-- Generation Time: Jun 17, 2023 at 05:32 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -42,9 +42,9 @@ CREATE TABLE `album_list` (
 
 INSERT INTO `album_list` (`id`, `name`, `user_id`, `delete_f`, `date_created`, `date_updated`) VALUES
 (1, 'Potato Leaf', 1, 0, '2021-08-09 10:23:50', '2023-06-04 12:08:17'),
-(2, 'Cherry Leaf', 1, 0, '2021-08-09 11:13:16', '2023-06-04 12:07:58'),
 (4, 'Corn Leaf', 1, 0, '2021-08-09 11:16:33', '2023-06-04 12:07:49'),
-(5, 'Tomato Leaf', 1, 0, '2021-08-09 11:16:41', '2023-06-04 12:07:39');
+(5, 'Tomato Leaf', 1, 0, '2021-08-09 11:16:41', '2023-06-04 12:07:39'),
+(8, 'Apple', 1, 0, '2023-06-17 10:53:23', NULL);
 
 -- --------------------------------------------------------
 
@@ -63,30 +63,43 @@ CREATE TABLE `images` (
   `date_updated` datetime DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `images`
+--
+
+INSERT INTO `images` (`id`, `album_id`, `original_name`, `path_name`, `delete_f`, `user_id`, `date_created`, `date_updated`) VALUES
+(102, 5, 'AppleBlackRot(1).jpg', 'uploads/user_1/album_5/1686965400.jpg', 0, 1, '2023-06-17 09:30:42', NULL),
+(103, 4, 'AppleBlackRot(1).jpg', 'uploads/user_1/album_4/1686970260.jpg', 0, 1, '2023-06-17 10:51:00', NULL);
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `plant`
+-- Table structure for table `prediction`
 --
 
-CREATE TABLE `plant` (
-  `id` int(11) NOT NULL,
-  `image` varchar(200) NOT NULL
+CREATE TABLE `prediction` (
+  `id` int(25) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `effects` text NOT NULL,
+  `cause` text NOT NULL,
+  `medicine` text NOT NULL,
+  `prevention` text NOT NULL,
+  `link` text NOT NULL,
+  `created_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `disease` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `plant`
+-- Dumping data for table `prediction`
 --
 
-INSERT INTO `plant` (`id`, `image`) VALUES
-(11, 'Apple'),
-(12, 'Apple'),
-(13, 'Apple'),
-(14, 'Apple'),
-(15, 'Apple'),
-(16, 'Apple'),
-(17, 'Apple'),
-(18, 'Apple');
+INSERT INTO `prediction` (`id`, `name`, `description`, `effects`, `cause`, `medicine`, `prevention`, `link`, `created_date`, `disease`) VALUES
+(99, 'Apple', '', '', '', '', '', '', '2023-06-17 08:52:12', 'No disease detected(Healthy Plant)'),
+(100, 'Apple', 'Black root rot, also called dead man’s fingers or Xylaria root rot, is occasionally observed on mature apple and cherry trees. Although trees of all ages can be infected, most trees that die from black root rot are at least 10 years old.', 'Black rot can reduce the yield of apple trees and make the fruit unmarketable. It can also weaken the tree, making it more susceptible to other diseases and pests.', 'Black rot is caused by the fungus Botryosphaeria obtusa. The fungus can survive in dead tissue on the tree or in the soil. It is spread by wind, rain, and insects.', 'There are no commercial fungicides that are specifically labeled for the control of black rot. However, some general-purpose fungicides can be effective.', 'Planting resistant varieties, Pruning to remove dead or diseased tissue, and Applying a fungicide before the onset of the growing season.', 'https://www.ontario.ca/page/black-rot', '2023-06-17 08:52:48', 'Black Rot'),
+(101, 'Corn', '', '', '', '', '', '', '2023-06-17 09:12:03', 'Cercos Pora'),
+(102, 'Apple', 'Black root rot, also called dead man’s fingers or Xylaria root rot, is occasionally observed on mature apple and cherry trees. Although trees of all ages can be infected, most trees that die from black root rot are at least 10 years old.', 'Black rot can reduce the yield of apple trees and make the fruit unmarketable. It can also weaken the tree, making it more susceptible to other diseases and pests.', 'Black rot is caused by the fungus Botryosphaeria obtusa. The fungus can survive in dead tissue on the tree or in the soil. It is spread by wind, rain, and insects.', 'There are no commercial fungicides that are specifically labeled for the control of black rot. However, some general-purpose fungicides can be effective.', 'Planting resistant varieties, Pruning to remove dead or diseased tissue, and Applying a fungicide before the onset of the growing season.', 'https://www.ontario.ca/page/black-rot', '2023-06-17 09:30:42', 'Black Rot'),
+(103, 'Apple', 'Black root rot, also called dead man’s fingers or Xylaria root rot, is occasionally observed on mature apple and cherry trees. Although trees of all ages can be infected, most trees that die from black root rot are at least 10 years old.', 'Black rot can reduce the yield of apple trees and make the fruit unmarketable. It can also weaken the tree, making it more susceptible to other diseases and pests.', 'Black rot is caused by the fungus Botryosphaeria obtusa. The fungus can survive in dead tissue on the tree or in the soil. It is spread by wind, rain, and insects.', 'There are no commercial fungicides that are specifically labeled for the control of black rot. However, some general-purpose fungicides can be effective.', 'Planting resistant varieties, Pruning to remove dead or diseased tissue, and Applying a fungicide before the onset of the growing season.', 'https://www.ontario.ca/page/black-rot', '2023-06-17 10:51:00', 'Black Rot');
 
 -- --------------------------------------------------------
 
@@ -153,9 +166,9 @@ ALTER TABLE `images`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `plant`
+-- Indexes for table `prediction`
 --
-ALTER TABLE `plant`
+ALTER TABLE `prediction`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -178,19 +191,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `album_list`
 --
 ALTER TABLE `album_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `images`
 --
 ALTER TABLE `images`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
 
 --
--- AUTO_INCREMENT for table `plant`
+-- AUTO_INCREMENT for table `prediction`
 --
-ALTER TABLE `plant`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+ALTER TABLE `prediction`
+  MODIFY `id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
 
 --
 -- AUTO_INCREMENT for table `system_info`
