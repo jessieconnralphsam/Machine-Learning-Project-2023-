@@ -8,6 +8,7 @@
     <div class="form-group">
         <label for="name">Last Name</label>
         <input type="text" name="lastname" id="lastname" class="form-control" value="" required>
+		<div id="username-error" class="error-message"></div>
     </div>
     <div class="form-group">
         <label for="username">Username</label>
@@ -70,4 +71,29 @@
 		})
 	})
 
+</script>
+<script>
+// Function to check the availability of the username
+function checkUsernameAvailability(username) {
+    $.ajax({
+        url: 'validationuser.php', // Replace with the actual URL to your server-side script
+        method: 'POST',
+        data: { username: username },
+        success: function(response) {
+            if (response === 'taken') {
+				$('#username-error').text('Username already exists!');
+				$('#submit').prop('disabled', true);
+            } else {
+				$('#username-error').text('');
+				$('#submit').prop('disabled', false);
+            }
+        }
+    });
+}
+
+// Attach an event listener to the username input field to trigger the availability check
+$('#username').on('blur', function() {
+    var username = $(this).val();
+    checkUsernameAvailability(username);
+});
 </script>
