@@ -1,9 +1,16 @@
-<?php 
-$user = $conn->query("SELECT * FROM users where id ='".$_settings->userdata('id')."'");
-foreach($user->fetch_array() as $k =>$v){
-	$meta[$k] = $v;
+<?php
+try {
+    $user = $conn->query("SELECT * FROM users WHERE id = '".$_settings->userdata('id')."'");
+    if ($user !== null && $user->num_rows > 0) {
+        $meta = $user->fetch_assoc();
+    } else {
+        // Handle the case when the query returned no results
+    }
+} catch (Exception $e) {
+    // Handle any exceptions that occur during the execution of the code
 }
 ?>
+
 <?php if($_settings->chk_flashdata('success')): ?>
 <script>
 	alert_toast("<?php echo $_settings->flashdata('success') ?>",'success')
