@@ -52,6 +52,10 @@
           border-color: #00ff00; /* Hover border color - Red */
         }
 
+        #create_account{
+            margin-left: 10px;
+        }
+
         .gradient-custom-2 {
         /* fallback for old browsers */
         background: #007bff;
