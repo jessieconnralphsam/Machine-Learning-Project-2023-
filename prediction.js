@@ -1,14 +1,14 @@
-  
-    // Load the Teachable Machine model
-    async function loadModel() {
-        const model = await tf.loadLayersModel('teacheable/model.json');
-    return model;
-  }
 
-      // Preprocess the input image
-      function preprocessImage(image) {
-        // Resize the image to match the input shape of the model
-        const resizedImage = tf.image.resizeBilinear(image, [224, 224]);
+// Load the Teachable Machine model
+async function loadModel() {
+    const model = await tf.loadLayersModel('teacheable/model.json');
+    return model;
+}
+
+// Preprocess the input image
+function preprocessImage(image) {
+    // Resize the image to match the input shape of the model
+    const resizedImage = tf.image.resizeBilinear(image, [224, 224]);
 
     // Normalize the pixel values between -1 and 1
     const normalizedImage = resizedImage.div(255).sub(0.5).mul(2);
@@ -17,11 +17,11 @@
     const batchedImage = normalizedImage.expandDims(0);
 
     return batchedImage;
-  }
+}
 
-    // Make predictions with the model
-      async function predict() {
-        const imageInput = document.getElementById('images');
+// Make predictions with the model
+async function predict() {
+    const imageInput = document.getElementById('images');
     const image = await loadImage(imageInput.files[0]);
     const preprocessedImage = preprocessImage(image);
 
@@ -31,395 +31,434 @@
 
     console.log('Predicted Label:', predictedLabel);
 
-        // mapping as per your label classes(butang og data base sa class)
-        const labelMap = {0: {name: 'Apple', 
-                          disease: 'Scab',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      1: {name: 'Apple',
-                          disease: 'Black Rot',
-                          description: 'Black root rot, also called dead man’s fingers or Xylaria root rot, is occasionally observed on mature apple and cherry trees. Although trees of all ages can be infected, most trees that die from black root rot are at least 10 years old.',
-                          effects:'Black rot can reduce the yield of apple trees and make the fruit unmarketable. It can also weaken the tree, making it more susceptible to other diseases and pests.', 
-                          cause:'Black rot is caused by the fungus Botryosphaeria obtusa. The fungus can survive in dead tissue on the tree or in the soil. It is spread by wind, rain, and insects.', 
-                          medicine: 'There are no commercial fungicides that are specifically labeled for the control of black rot. However, some general-purpose fungicides can be effective.', 
-                          prevention:'Planting resistant varieties, Pruning to remove dead or diseased tissue, and Applying a fungicide before the onset of the growing season.',
-                          link:'https://www.ontario.ca/page/black-rot#:~:text=Black%20rot%20is%20an%20important,for%20nearby%20younger%20bearing%20blocks',
-                         },
-                      2:{name: 'Apple', 
-                          disease: 'No disease detected(Healthy Plant)',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      3:{name: 'Blueberry', 
-                          disease: 'Healthy',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      4:{name: 'Cherry', 
-                          disease: 'Healthy',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      5:{name: 'Cherry', 
-                          disease: 'Powdery Mildew',
-                          description: 'Cherry powdery mildew is brought on by Podosphaera clandestina, a fungus. Powdery mildew shows as white, powdery, or felt-like fungal growth in areas on leaves. It can distort the affected plant parts and cause them to become stunted or deformed.',
-                          effects:'Cherry trees can suffer from powdery mildew, which decreases their vitality, development, and general output. Premature leaf drop from infected plants might result in less photosynthesis and poorer fruit quality. Fruit that has been severely harmed may develop cracks or distortions that make it unfit for market or consumption.', 
-                          cause:'Cherry tree powdery mildew is brought on by fungi, particularly Podosphaera and Blumeria species. These fungus prefer warm, humid weather, which they frequently encounter in the spring and early summer. High humidity levels, congested tree canopies, and poor ventilation can all promote the growth and spread of disease.',
-                          medicine: 'For the management of powdery mildew on cherry trees, fungicides are readily accessible on the market. Fungicides like sulfur, myclobutanil, and propiconazole are frequently applied. To use fungicides safely and effectively, it is crucial to carefully read and adhere to the instructions on the product labels as well as take into account any regional rules or recommendations.', 
-                          prevention:'Reduce humidity and enhance airflow by pruning and thinning the canopy, which can thwart the growth of illness.  Apply fungicides preventively, especially during times of strong disease pressure or when the environment is conducive to the growth of powdery mildew. If at all possible, avoid overhead irrigation since moist foliage might encourage the growth of powdery mildew. Instead, to keep the roots moist without wetting the foliage, utilize drip watering or soaker hose irrigation.',
-                          link:'https://www.bctfpg.ca/pest_guide/info/101/Powdery_Mildew_Sweet_Cherries#:~:text=General%20Description,by%20the%20fungus%20Podosphaera%20clandestina.&text=On%20leaves%2C%20powdery%20mildew%20appears,often%20puckered%20or%20distorted%20',
-                         },
-                      6:{name: 'Corn', 
-                          disease: 'Cercos Pora',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      7:{name: 'Corn', 
-                          disease: 'Common Rust',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      8:{name: 'Corn', 
-                          disease: 'Healthy',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      9:{name: 'Corn', 
-                          disease: 'Northern Leaf Blight',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      10:{name: 'Grape', 
-                          disease: 'Black Rot',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      11:{name: 'Grape', 
-                          disease: 'Black Measles',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      12:{name: 'Grape', 
-                          disease: 'Healthy',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      13:{name: 'Grape', 
-                          disease: 'Isariopsis Leaf Spot',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      14:{name: 'Orange', 
-                          disease: 'Haunglongbing',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      15:{name: 'Peach', 
-                          disease: 'Bacterial Spot',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      16:{name: 'Peach', 
-                          disease: 'Healthy',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      17:{name: 'Pepper', 
-                          disease: 'Bacterial Spot',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      18:{name: 'Pepper', 
-                          disease: 'Healthy',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      19:{name: 'Potato', 
-                          disease: 'Early Blight',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      20:{name: 'Raspberry', 
-                          disease: 'Healthy',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      21:{name: 'Soybean', 
-                          disease: 'Healthy',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      22:{name: 'Squash', 
-                          disease: 'Powdery Mildew',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      23:{name: 'Strawberry', 
-                          disease: 'Healthy',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      24:{name: 'Strawberry', 
-                          disease: 'Leaf Scorch',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      25:{name: 'Tomato', 
-                          disease: 'Bacterial Spot',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      26:{name: 'Tomato', 
-                          disease: 'Early Blight',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      27:{name: 'Tomato', 
-                          disease: 'Healthy',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      28:{name: 'Tomato', 
-                          disease: 'Late Blight',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      29:{name: 'Tomato', 
-                          disease: 'Leaf Mold',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      30:{name: 'Tomato', 
-                          disease: 'Septoria Leaf Spot',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      31:{name: 'Tomato', 
-                          disease: 'Spider Mites',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      32:{name: 'Tomato', 
-                          disease: 'Target Spot',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      33:{name: 'Tomato', 
-                          disease: 'Mosaic Virus',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      34:{name: 'Tomato', 
-                          disease: 'Yellow Leaf Curl Virus',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      35:{name: 'Apple', 
-                          disease: 'Cedar Rust',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      36:{name: 'Potato', 
-                          disease: 'Healthy',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      37:{name: 'Potato', 
-                          disease: 'Late Blight',
-                          description: '',
-                          effects:'', 
-                          cause:'',
-                          medicine: '', 
-                          prevention:'',
-                          link:'',
-                         },
-                      };
+    // mapping as per your label classes(butang og data base sa class)
+    const labelMap = {
+        0: {
+            name: 'Apple',
+            disease: 'Scab',
+            description: "",
+            effects: "",
+            cause: "",
+            medicine: "",
+            prevention: "",
+            link: "",
+        },
+        1: {
+            name: 'Apple',
+            disease: 'Black Rot',
+            description: 'Black root rot, also called dead man’s fingers or Xylaria root rot, is occasionally observed on mature apple and cherry trees. Although trees of all ages can be infected, most trees that die from black root rot are at least 10 years old.',
+            effects: 'Black rot can reduce the yield of apple trees and make the fruit unmarketable. It can also weaken the tree, making it more susceptible to other diseases and pests.',
+            cause: 'Black rot is caused by the fungus Botryosphaeria obtusa. The fungus can survive in dead tissue on the tree or in the soil. It is spread by wind, rain, and insects.',
+            medicine: 'There are no commercial fungicides that are specifically labeled for the control of black rot. However, some general-purpose fungicides can be effective.',
+            prevention: 'Planting resistant varieties, Pruning to remove dead or diseased tissue, and Applying a fungicide before the onset of the growing season.',
+            link: 'https://www.ontario.ca/page/black-rot#:~:text=Black%20rot%20is%20an%20important,for%20nearby%20younger%20bearing%20blocks',
+        },
+        2: {
+            name: 'Apple',
+            disease: 'Healthy',
+            description: 'A healthy apple tree displays vibrant green leaves free from spots, discoloration, or signs of damage. The leaves are typically smooth, glossy, and evenly distributed on the branches. The tree has a strong and well-formed central trunk, with branches extending outward in a balanced manner. The bark appears healthy and intact, without any visible wounds or cracks. Overall, a healthy apple tree presents a robust and vigorous appearance',
+            effects: 'A healthy apple tree experiences robust growth, leading to optimal fruit production. It develops an extensive root system that efficiently absorbs nutrients and water from the soil. The tree produces abundant blossoms that are pollinated successfully, resulting in a high yield of healthy fruits. The fruits exhibit desirable characteristics such as vibrant colors, good size, and excellent flavor.',
+            cause: 'Several factors contribute to the health of an apple tree. Such are providing a balanced nutrient supply through appropriate fertilization as essential for growth and fruit development, proper watering practices, ensuring the tree receives adequate moisture without waterlogging, and promoting healthy root development. Furthermore, sufficient sunlight exposure stimulates photosynthesis which aids in the production of energy and vital nutrients; maintaining a pest-free environment through regular monitoring and implementing appropriate pest management practices is crucial for preserving tree health.',
+            medicine: 'A healthy apple tree does not require medication. Instead, focusing on proper plant care practices is the essential thing to do. Such includes regular pruning to maintain a proper tree structure, improve air circulation, and remove diseased or damaged branches. Also, consideration for adequate fertilization with appropriate nutrients may promote tree vitality, and integration of pest management techniques, such as beneficial insects or organic pest control methods, may help maintain a healthy tree.',
+            prevention: 'In order to maintain the health of apple trees, several preventive measures must be taken. Such can be regular monitoring of the tree for signs of pests, diseases, or nutrient deficiencies that allows for timely intervention, providing the tree with appropriate irrigation, and ensuring it receives adequate water without excessive moisture, which helps prevent root-related diseases, and also the proper spacing between trees that allows for good air circulation, reducing the risk of fungal infections.',
+            link: 'https://www.almanac.com/plant/apples',
+        },
+        3: {
+            name: 'Blueberry',
+            disease: 'Healthy',
+            description: 'A healthy blueberry plant showcases vibrant green leaves that are free from spots, discoloration, or signs of damage. The leaves are typically small, elliptical, and arranged in an alternating pattern along the stems. The plant exhibits an overall compact and bushy appearance, with sturdy branches and well-formed buds. The bark appears smooth and unblemished. A healthy blueberry plant may also display delicate white flowers during the blooming season.',
+            effects: "A healthy blueberry plant experiences robust growth and development. It produces an abundance of high-quality berries that are plump, juicy, and flavorful. The plant's vigorous growth results in an increased yield of berries per bush. Also, a healthy blueberry plant is more resilient to environmental stressors such as drought, heat, or cold, allowing it to thrive in various conditions. Moreover, healthy plants are equipped against pests and diseases, which leads to improved overall productivity.",
+            cause: 'Several factors contribute to the health of a blueberry plant. Blueberries prefer acidic soil conditions, so maintaining the appropriate soil pH is important. Adequate watering, ensuring the plant receives consistent moisture without becoming waterlogged, promotes healthy root development. Blueberries thrive in full sun or partial shade, so providing the plant with adequate sunlight exposure is essential.',
+            medicine: 'A healthy blueberry plant typically does not require medication. However, certain pests or diseases may occasionally affect blueberries. In that case, appropriate pest control measures or disease management strategies must be implemented. These may include the use of organic insecticides, beneficial insects, or cultural practices like pruning affected branches to mitigate the spread of diseases.',
+            prevention: 'In order to maintain the health of blueberry plants, several preventive measures must be taken. Such can be regular monitoring for signs of pests, diseases, or nutrient deficiencies that allows for early intervention, proper watering, providing sufficient moisture without overwatering that helps prevent root-related diseases, maintaining proper spacing between plants, and adequate airflow that reduces the risk of fungal infections, and implementing crop rotation practices and removing fallen leaves or debris that helps minimize disease buildup.',
+            link: 'https://extension.umn.edu/fruit/growing-blueberries-home-garden',
+        },
+        4: {
+            name: 'Cherry',
+            disease: 'Healthy',
+            description: 'A healthy cherry plant displays vibrant green leaves that are smooth and free from any spots, discoloration, or deformities. The leaves are lush and have a glossy appearance, indicating optimal chlorophyll production. The plant itself exhibits vigorous growth, with strong branches and a well-formed canopy. Overall, a healthy cherry plant has an attractive and robust appearance.',
+            effects: 'A healthy cherry plant experiences robust growth, producing a well-developed canopy that maximizes sunlight exposure for photosynthesis. Hence, this leads to increased energy production and carbohydrate accumulation, supporting optimal fruit development and yield. Healthy cherry plants also exhibit improved resistance to environmental stressors, such as extreme temperatures or drought, enabling them to thrive under various conditions.',
+            cause: 'Several factors contributing to the health of a cherry plant include a balanced nutrient supply. Providing adequate fertilization with essential macronutrients, such as nitrogen, phosphorus, potassium, and micronutrients, promotes overall plant health. Proper watering practices, ensuring the plant receives sufficient moisture without waterlogging, are important. Also, maintaining a pest-free environment through regular monitoring and implementing appropriate pest management measures is crucial for plant health.',
+            medicine: 'A healthy cherry plant generally does not require medication. However, in a case wherein pests or diseases affect the plant, appropriate pest control measures or disease management strategies must be employed. These may include the use of organic insecticides, beneficial insects, or cultural practices like pruning affected branches to prevent disease spread.',
+            prevention: "In order to maintain the health of cherry plants, several preventive measures can be followed. Such can be regular monitoring of the plant's overall condition, including leaf health and fruit development, that helps detect early signs of stress, diseases, or pests, then timely watering that provides sufficient moisture during dry periods, and appropriate spacing between plants that allows for good air circulation, reducing the risk of fungal infections. Additionally, implementing crop rotation practices and maintaining overall plant hygiene, such as removing fallen leaves or debris, can help minimize disease buildup.",
+            link: 'https://www.gardeningknowhow.com/edible/fruits/cherry/cherry-tree-care.htm',
+        },
+        5: {
+            name: 'Cherry',
+            disease: 'Powdery Mildew',
+            description: 'Cherry powdery mildew is brought on by Podosphaera clandestina, a fungus. Powdery mildew shows as white, powdery, or felt-like fungal growth in areas on leaves. It can distort the affected plant parts and cause them to become stunted or deformed.',
+            effects: 'Cherry trees can suffer from powdery mildew, which decreases their vitality, development, and general output. Premature leaf drop from infected plants might result in less photosynthesis and poorer fruit quality. Fruit that has been severely harmed may develop cracks or distortions that make it unfit for market or consumption.',
+            cause: 'Cherry tree powdery mildew is brought on by fungi, particularly Podosphaera and Blumeria species. These fungus prefer warm, humid weather, which they frequently encounter in the spring and early summer. High humidity levels, congested tree canopies, and poor ventilation can all promote the growth and spread of disease.',
+            medicine: 'For the management of powdery mildew on cherry trees, fungicides are readily accessible on the market. Fungicides like sulfur, myclobutanil, and propiconazole are frequently applied. To use fungicides safely and effectively, it is crucial to carefully read and adhere to the instructions on the product labels as well as take into account any regional rules or recommendations.',
+            prevention: 'Reduce humidity and enhance airflow by pruning and thinning the canopy, which can thwart the growth of illness.  Apply fungicides preventively, especially during times of strong disease pressure or when the environment is conducive to the growth of powdery mildew. If at all possible, avoid overhead irrigation since moist foliage might encourage the growth of powdery mildew. Instead, to keep the roots moist without wetting the foliage, utilize drip watering or soaker hose irrigation.',
+            link: 'https://www.bctfpg.ca/pest_guide/info/101/Powdery_Mildew_Sweet_Cherries#:~:text=General%20Description,by%20the%20fungus%20Podosphaera%20clandestina.&text=On%20leaves%2C%20powdery%20mildew%20appears,often%20puckered%20or%20distorted%20',
+        },
+        6: {
+            name: 'Corn',
+            disease: 'Cercos Pora',
+            description: "A leaf disease that infects corn is called Cercospora leaf spot. The fungus Cercospora zeae-maydis is the root of the problem. On the leaves, the illness appears as small, tan to grayish-brown lesions. The lesions get larger as the disease worsens, and their centers turn dark brown or purplish-brown with yellow halos surrounding them.",
+            effects: "The Cercospora leaf spot can harm corn plants in several ways. Severe infections may result in defoliation, which lowers the plant's ability to photosynthesize and may affect grain fill and production. Additionally, the disease may weaken the plant, leaving it more vulnerable to additional stresses or diseases.",
+            cause: "The fungus Cercospora zeae-maydis is responsible for the Cercospora leaf spot. Initial infections are brought on by the fungus, which can be seed-borne and persists in contaminated plant detritus. Spores splashed by rain, blown by the wind, or transported by insects are how the disease spreads. Accordingly, the development of disease is favored by warm, humid environments.",
+            medicine: "The Cercospora leaf spot in corn is not currently the target of any specific chemical therapies or medications. However, cultural customs and management techniques might lessen the effects of the illness.",
+            prevention: "In order to prevent the Cercospera leaf spot, one must do crop rotation to help prevent the pathogen from accumulating in the soil, alternate maize with non-host crops, and sanitation to lessen the fungus's supply for overwintering, remove and destroy agricultural trash after the growing season. Additionally, foliar fungicides approved for controlling the Cercospora leaf spot may be used in extreme circumstances.",
+            link: "https://www.pioneer.com/us/agronomy/gray_leaf_spot_cropfocus.html#:~:text=Gray%20leaf%20spot%20(GLS)%20is,for%2012%20hours%20or%20more.",
+        },
+        7: {
+            name: 'Corn',
+            disease: 'Common Rust',
+            description: "The fungus known as common rust or Puccinia sorghi infects corn plants and causes various symptoms on the leaves, husks, stalks, and tassels. Within parts of a damaged plant affected by the disease, such causes small, oval to elongated pustules or lesions.",
+            effects: "The common rust produces reddish-brown to orange pustules that grow and converge, causing visible harm to the leaves. Although not a serious risk, severe infections can impair photosynthesis, cause premature defoliation, and perhaps reduce production. Reduced test weight and higher susceptibility to damage or mold contamination are two effects of common rust on grain quality.",
+            cause: "The fungus Puccinia sorghi is responsible for common rust in corn. The fungus overwinters in warm areas and lives in crop debris. It requires high humidity and temperatures for infection and illness development and spreads by wind-dispersed spores.",
+            medicine: "If necessary, fungicides can be used to treat common rust in corn. However, they are only used in severe infections and climates wherein disease development is encouraged. For particular fungicide recommendations and application instructions, seek advice from local agricultural extension offices or specialists.",
+            prevention: "In order to prevent common rust, one must plant rust-resistant cultivars that have been bred specifically to resist the disease, use a crop rotation strategy and avoid growing corn in succession, and use adequate tillage and residue management. Accordingly, one must keep an eye for pustules and ulcers on leaves as such is an early indication of common rust in fields.",
+            link: "https://www.pioneer.com/us/agronomy/common_rust_corn_cropfocus.html",
+        },
+        8: {
+            name: 'Corn',
+            disease: 'Healthy',
+            description: "A healthy corn plant will have bright green leaves that start low on the stalk and reach upward in an orderly fashion. The stalk must be sturdy and robust, without any signs of discoloration or damage. Then, the corn is spaced evenly, with plenty of room to grow.",
+            effects: "A healthy corn plant does efficient photosynthesis, which leads to optimal energy production for plant growth and development. Such has a higher resistance to environmental stressors, such as drought, heat, and pests, which helps maintain its overall health and productivity. Also, a healthy corn plant demonstrates good ear development, which results in optimal yield and quality.",
+            cause: "Several factors contribute to the health of a corn plant, which include a balanced nutrient supply, proper watering, adequate sunlight exposure, and a pest-free environment. By this means, correct planting procedures and soil preparation are also important factors for healthy corn growth.",
+            medicine: "Since a healthy corn plant does not require medicine, various practices such as fertilization, pruning, pest management, and disease prevention are important to promote plant health. Proper crop rotation and the use of natural methods, such as companion planting and beneficial insects, can also help maintain a healthy corn crop.",
+            prevention: "In order to maintain the health of corn plants, several preventive measures can be followed. One must follow proper planting techniques, adequate irrigation that requires consistent and sufficient moisture throughout the growing season, nutrient management, pest control, and weed management to minimize competition for nutrients, water, and sunlight.",
+            link: "https://www.almanac.com/plant/corn",
+        },
+        9: {
+            name: 'Corn',
+            disease: 'Northern Leaf Blight',
+            description: "The ideal climate for northern corn leaf blight is one that is mildly warm and humid. The disease may occur in areas with a lot of rain, high humidity, or fields susceptible to long periods of heavy dew. As the illness advances, symptoms may spread to higher leaves in the canopy but typically start on the lower leaves. Infected hybrids may exhibit signs in leaf blades, sheaths, and ear husks.",
+            effects: "The growth of corn plants and yield may be significantly impacted by northern corn leaf blight. The illness lowers the leaves' capacity for photosynthetic activity, which restricts the plant's ability to create nutrients and energy. Severe infections may cause early defoliation, which may decrease grain fill and, perhaps, lower yield.",
+            cause: "The northern corn leaf blight is caused mostly by the fungus Exserohilum turcicum. This fungus spreads by agricultural debris that has been contaminated, as well as spores carried by the wind or rain splash.",
+            medicine: "There are fungicides on the market that can be used to treat northern corn leaf blight. By this means, the timing, manner, and particular fungicide employed play a role in the success rate of the treatment. For advice on using fungicides, speak with your local extension services or agricultural experts.   ",
+            prevention: "In order to prevent northern corn leaf blight, one must select corn hybrids with disease resistance or tolerance, implement crop rotation, practice proper tillage and residue management, monitor fields for early detection, and consider fungicide application when necessary as some preventive measures to manage Northern Leaf Blight. Accordingly, one must consult regional and growing-condition-specific experts for specialized preventative techniques against the disease.",
+            link: "https://www.extension.purdue.edu/extmedia/bp/bp-84-w.pdf",
+        },
+        10: {
+            name: 'Grape',
+            disease: 'Black Rot',
+            description: 'Grape black rot is a fungal disease affecting several parts of a grapevine, including leaves, fruit clusters, and shoots. Such causes distinct circular lesions on the affected plant parts, starting as small, brown spots and gradually enlarging. As the lesions expand, they develop a dark, sunken center with a reddish-brown border. The affected fruit may shrivel and turn black, resembling mummies that remain attached to the vine.',
+            effects: 'Grape black rot can have significant negative effects on grapevines. It can reduce vine vigor, stunt growth, and lead to defoliation. Infected fruit can experience poor sugar accumulation, which results in reduced quality and yield. Severe infections can cause significant crop losses.',
+            cause: 'The fungus known as Guignardia bidwellii is responsible for grape black rot. Such overwinters in infected plant debris and release spores in the spring. The spores can spread through wind, rain, and cultural practices, such as pruning and vineyard maintenance.',
+            medicine: 'Several fungicides are available in the market for managing black rot. Fungicide application timing, frequency, and specific products depend on local recommendations and the stage of the disease. One must consult with agricultural experts or extension services for guidance on effective fungicide use.',
+            prevention: "The preventive measures for grape black rot include cultural practices such as pruning, canopy management, maintaining good air circulation to reduce humidity, then removing and destroying infected plant debris that helps reduce the disease's overwintering potential, and selecting grape varieties with some level of resistance to Black Rot can be beneficial. Regular scouting and monitoring of vineyards for early detection and prompt action are also important for disease management.",
+            link: 'https://www.missouribotanicalgarden.org/gardens-gardening/your-garden/help-for-the-home-gardener/advice-tips-resources/pests-and-problems/diseases/fruit-spots/black-rot-of-grapes#:~:text=Black%20rot%2C%20caused%20by%20the,effect%20is%20to%20the%20fruit.',
+        },
+        11: {
+            name: 'Grape',
+            disease: 'Black Measles',
+            description: "Grape black measles is a complex fungal disease that affects the wood and leaves of grapevines. Such is characterized by various symptoms, including tiger-striped discoloration of the leaves, internal dark discoloration of the wood, and black or brown streaks in the vascular tissues. The disease can cause the gradual decline and death of affected vines.",
+            effects: "Grape black measles can cause severe impacts on grapevines that lead to reduced vigor, stunted growth, and reduced yield. Infected vines may exhibit leaf yellowing, premature leaf drop, and decreased fruit quality. In some cases, a complete vine death can occur.",
+            cause: "Grape black measles is caused by fungal pathogens such as Phaeomoniella chlamydospora, Phaeoacremonium, and other associated fungi. Accordingly, the disease can be influenced by environmental factors and stressors such as drought, heat, or nutrient imbalances.",
+            medicine: "There are currently no curative treatments available for grape black measles. Such disease management must primarily focus on preventive measures and cultural practices to minimize disease incidence and spread.",
+            prevention: "The preventive measures for grape black measles include practices such as sanitation, proper pruning techniques, and careful selection of planting material, and minimizing vine stress through appropriate irrigation and nutrient management which can also help reduce disease development. Additionally, techniques like trunk renewal, which involves replacing diseased wood, can be employed in affected vineyards.",
+            link: "https://www.burgundy-report.com/wp/wp-content/uploads/2005/09/esca_report.pdf",
+        },
+        12: {
+            name: 'Grape',
+            disease: 'Healthy',
+            description: "A healthy grapevine is characterized by vibrant green leaves that are free from any spots, discoloration, or signs of damage. The leaves are full and lush, providing ample shade for the clusters of grapes. The vine itself is sturdy, with well-developed branches and a strong trunk. The overall appearance of a healthy grapevine is vigorous and lush, reflecting its optimal growth and vitality.",
+            effects: "A healthy grape plant will have robust growth, resulting in optimal yield, improved resistance to environmental stressors, and enhanced photosynthesis. Such will also produce flavorful and high-quality fruit with desirable characteristics such as size, color, and sugar levels.",
+            cause: "Several factors contribute to the health of a grape plant, which include a balanced nutrient supply, proper watering, adequate sunlight exposure, and a pest-free environment. Also, the application of appropriate pruning techniques and winter protection measures is important for healthy grapevine growth.",
+            medicine: "Since a healthy grapevine does not require medicine, focus on plant care practices to maintain its health. This may involve guidance on fertilization, ensuring the vine receives the necessary nutrients throughout the growing season. Disease prevention measures, including regular monitoring for signs of fungal infections or rot, contribute to the vine's overall health.",
+            prevention: "In order to promote healthy grape leaves, regular monitoring of the vine's condition is crucial. Timely watering based on the vine's water needs, appropriate spacing between vines for good air circulation, practicing crop rotation, and maintenance of overall vine hygiene by removing fallen leaves and debris can help prevent diseases and maintain leaf health.",
+            link: "https://www.almanac.com/plant/grapes",
+        },
+        13: {
+            name: 'Grape',
+            disease: 'Isariopsis Leaf Spot',
+            description: "Isariopsis leaf spot is a fungal disease that primarily affects the leaves of grapevines. The disease manifests as small, circular to irregularly shaped spots on the upper surface of the leaves. These spots initially appear water-soaked and later turn brown or grayish with a dark brown border. Severe infections can cause premature defoliation.",
+            effects: "Isariopsis leaf spot can lead to reduced photosynthetic capacity in the affected leaves, affecting the overall growth and vigor of the grapevines. Severe infections may result in defoliation that can impact fruit quality and yield.",
+            cause: "The fungus Isariopsis griseola is the primary cause of Isariopsis leaf spot in grapevines. The disease can spread through infected plant material, wind, or rain splash.",
+            medicine: "Currently, there are no specific registered fungicides available for the control of Isariopsis Leaf Spot. However, general fungicides effective against foliar fungal diseases in grapes may be used for management. One must consult with local agricultural experts or extension services for recommendations on fungicide use.",
+            prevention: "The preventive measures for Isariopsis leaf spot include cultural practices such as maintaining good air circulation in the vineyard, practicing proper canopy management, and avoiding excessive nitrogen fertilization, which can promote disease development. Also, regular scouting and monitoring of grapevines for early detection of symptoms are important.",
+            link: "https://plantvillage.psu.edu/topics/grape/infos",
+        },
+        14: {
+            name: 'Orange',
+            disease: 'Haunglongbing',
+            description: "'Huanglongbing is a devastating bacterial disease that affects citrus trees, including oranges. Symptoms of the disease include yellowing and blotchy mottling of leaves, stunted growth, misshapen and bitter-tasting fruits, and a decline in overall tree health.",
+            effects: "Huanglongbing can have severe impacts on orange trees. Such leads to reduced fruit production, poor fruit quality, and ultimately, the decline and death of infected trees. The disease can significantly affect the citrus industry by reducing yields and rendering affected fruits unmarketable.",
+            cause: "Huanglongbing is primarily transmitted by the Asian citrus psyllid, Diaphorina citri, which is considered an insect vector. These infected psyllids can spread the bacterium to healthy trees by feeding on the sap. The bacterium can also be transmitted through the grafting of infected plant material.",
+            medicine: "Currently, there is no known cure or specific treatment for Huanglongbing. Disease management focuses on cultural practices, such as vector control, removing and destroying infected trees, and promoting overall tree health.",
+            prevention: "The prevention of Huanglongbing involves implementing strict vector control measures, such as monitoring and managing psyllid populations, using insecticides when necessary, and employing physical barriers. Early detection and removal of infected trees are critical to prevent the spread of the disease. Additionally, maintaining tree health through proper nutrition, irrigation, and pruning can help enhance tree resistance and reduce disease susceptibility.",
+            link: "https://ipm.ucanr.edu/PMG/PESTNOTES/pn74155.html",
+        },
+        15: {
+            name: 'Peach',
+            disease: 'Bacterial Spot',
+            description: "Bacterial spot is a common disease in peaches that affects various parts of the peach tree, including leaves, twigs, and fruits. The disease typically manifests as small, dark spots on the leaves, which may enlarge and develop a water-soaked appearance. Infected fruits can also exhibit dark, raised spots with a rough texture.",
+            effects: "Bacterial spot can have significant impacts on peach trees in terms of reduced vigor, defoliation, and decreased fruit quality. Severe infections can lead to premature fruit drop and yield losses. The disease can also weaken the tree and make it more susceptible to other pathogens.",
+            cause: "Bacterial spot is caused by the bacterium Xanthomonas arboricola pv. pruni. The bacteria can survive in plant debris, bud scales, and infected plant surfaces. They spread through splashing water, rain, or irrigation, as well as by pruning tools and insects.",
+            medicine: "There are limited chemical control options for bacterial spots in peaches. Copper-based bactericides may be used in some regions as a preventive measure or in combination with other management strategies. However, it is important to check local regulations and consult with agricultural experts for approved products and usage guidelines.",
+            prevention: "The prevention of bacterial spots in peaches involves implementing a combination of cultural and sanitation practices. These include planting resistant varieties when available, avoiding overhead irrigation, promoting good air circulation, and practicing proper pruning techniques. Sanitation measures, such as removing and destroying infected plant debris, can help reduce disease pressure.",
+            link: "https://www.canr.msu.edu/ipm/agriculture/fruit/bacterial_spot_of_peach_and_plum",
+        },
+        16: {
+            name: 'Peach',
+            disease: 'Healthy',
+            description: "A healthy peach tree should have vibrant green leaves, an absence of spots or discoloration, and an overall healthy appearance. The tree should also have strong, sturdy branches and healthy-looking fruit without signs of damage or deformity.",
+            effects: "A healthy peach tree influences the leaves to support robust growth and development, allowing the tree to produce optimal yields of delicious peaches and perform photosynthesis efficiently, generating energy and carbohydrates essential for growth, fruit production, and overall plant health.",
+            cause: "Several factors contribute to the health of a peach tree, which include pruning the tree properly in the winter to remove dead or diseased wood and branches that are crossing or touching other branches, providing regular deep watering and fertilization in the early spring and early summer with a balanced fertilizer designed for fruit trees, monitoring for pests and diseases, thin fruit to prevent stress, and then providing winter protection as needed.",
+            medicine: "Since a healthy peach tree does not require medicine, the following practices, such as fertilization, pruning, pest management, and disease prevention, are important for promoting tree health. Proper crop rotation, soil amendments, and the use of natural pest management techniques can also help maintain a healthy peach crop.",
+            prevention: "In order to maintain peach tree health, regular monitoring, timely watering, appropriate spacing, and maintenance for overall plant hygiene are important factors to consider. Accordingly, peach growers should make efforts to mitigate the impact of environmental stressors such as drought, frost, and wind.",
+            link: "https://www.hgtv.com/outdoors/flowers-and-plants/fruit/growing-perfect-peaches",
+        },
+        17: {
+            name: 'Pepper',
+            disease: 'Bacterial Spot',
+            description: "A bacterial spot is a common disease in pepper plants caused by the bacterium Xanthomonas campestris pv. vesicatoria. Such affects the leaves, stems, and fruits of pepper plants. Moreover, the disease manifests as small, water-soaked lesions on the leaves, which later turn brown or black and may have a yellow halo. Infected fruits may develop raised, corky spots with dark centers.",
+            effects: "Bacterial spots can have significant effects on pepper plants. Such can lead to defoliation, reduced plant vigor, and decreased fruit quality and yield. Severe infections may cause premature fruit drop, resulting in significant economic losses for pepper growers.",
+            cause: "Bacterial spots in peppers are caused by the bacterium Xanthomonas campestris pv. vesicatoria. The bacteria can survive on infected plant debris, seeds, or weed hosts. Such spread through water, rains, irrigation, wind-driven rain, or mechanical means such as tools, insects, or human contact.",
+            medicine: "There are limited chemical options available for controlling bacterial spots in peppers. Copper-based bactericides may be used preventively or in combination with other management practices. However, such is still important to check local regulations and consult with agricultural experts for approved products and guidelines.",
+            prevention: "The prevention of bacterial spots in peppers involves a combination of cultural practices and sanitation measures. These include using certified disease-free seeds, practicing crop rotation, providing adequate spacing between plants for good air circulation, avoiding overhead irrigation, and removing and destroying infected plant debris. Accordingly, field sanitation and maintaining good plant hygiene are essential to reduce disease pressure.",
+            link: "https://www.apsnet.org/edcenter/disandpath/prokaryote/pdlessons/Pages/Bacterialspot.aspx",
+        },
+        18: {
+            name: 'Pepper',
+            disease: 'Healthy',
+            description: "A healthy pepper plant typically exhibits vibrant green leaves, free from spots or discoloration. The plant has a sturdy stem and an overall robust appearance. Such shows vigorous growth with multiple branches and abundant production of flowers and fruits. The leaves are lush and glossy, indicating optimal photosynthesis and nutrient uptake.",
+            effects: "A healthy pepper plant experiences robust growth, resulting in a higher yield of high-quality fruits. Such is equipped to withstand environmental stressors such as extreme temperatures or drought. The plant demonstrates efficient nutrient utilization, leading to optimal fruit development, flavor, and nutritional content.",
+            cause: "The health of a pepper plant is influenced by various factors, which include providing a balanced nutrient supply through appropriate fertilization, ensuring the plant receives essential elements for growth and development, then proper watering practices, such as consistent moisture without waterlogging, that contribute to healthy roots and prevent diseases, and adequate sunlight exposure stimulates photosynthesis, enabling the plant to produce energy.",
+            medicine: "A healthy pepper plant does not require medication. Instead, plant care practices play a crucial role. Such includes regular monitoring for signs of pests or diseases, promptly implementing appropriate control measures, and proper fertilization with balanced nutrients to support the plant's health and productivity. Pruning techniques, such as removing diseased or damaged branches, contribute to overall plant vitality.",
+            prevention: "In order to maintain pepper plant health, such is essential to implement preventive measures. Such includes providing adequate spacing between plants for good air circulation, which reduces the risk of diseases, regular monitoring for pests and diseases that help identify issues early and take necessary action, and following crop rotation practices that help prevent the buildup of soil-borne pathogens. Accordingly, maintaining cleanliness and removing fallen debris minimizes potential disease sources.",
+            link: "https://peppergeek.com/increase-pepper-plant-yield/",
+        },
+        19: {
+            name: 'Potato',
+            disease: 'Early Blight',
+            description: "Early blight is a common fungal disease that affects the leaves, stems, and sometimes the tubers of the potato plant. The disease appears as small, dark brown to black lesions on the lower leaves, which gradually enlarge and develop concentric rings, giving them a target-like appearance. As the disease progresses, the leaves may become yellow and eventually wither and die.",
+            effects: "Early blight can have significant effects on potato plants. Such can result in reduced plant vigor, defoliation, and decreased tuber quality and yield. Infected plants may experience stunted growth, reduced photosynthetic capacity, and smaller tuber size. Severe infections can lead to significant yield losses, affecting the economic viability of potato production.",
+            cause: "Early blight in potatoes is caused by the fungal pathogen Alternaria solani. The pathogen overwinters in infected plant debris or in the soil and can be introduced through infected seed potatoes. Moreover, the disease desires warm, humid conditions and prolonged leaf wetness. Such spreads through windblown spores, water splashes, contaminated equipment, and infected plant material.",
+            medicine: "Several fungicides are available in the market for managing early blight in potatoes. These fungicides may contain active ingredients such as chlorothalonil, mancozeb, or azoxystrobin. However, such is still important to follow local regulations and consult with agricultural experts for approved products and proper application guidelines.",
+            prevention: "The prevention of early blight in potatoes involves implementing cultural and management practices. These include planting certified disease-free seed potatoes, rotating crops to reduce disease buildup, maintaining proper spacing between plants for good air circulation, practicing irrigation methods that minimize leaf wetness, and timely removal and destruction of infected plant debris can help reduce disease pressure. Accordingly, regular scouting and monitoring for symptoms and early detection are crucial for effective disease management.",
+            link: "https://onlinelibrary.wiley.com/doi/full/10.1002/ps.6320",
+        },
+        20: {
+            name: 'Raspberry',
+            disease: 'Healthy',
+            description: "A healthy raspberry plant is characterized by vibrant green foliage, sturdy and upright stems, vigorous growth, numerous clusters of white flowers, abundant and plump fruits such as red or black, depending on the variety, and an overall absence of visible symptoms such as wilting, spotting, or discoloration. Regular care and maintenance, including proper watering, fertilization, and pruning, contribute to the plant's health and productivity.",
+            effects: "A healthy raspberry plant thrives with strong stems, lush foliage, and abundant clusters of white flowers, resulting in a bountiful yield of flavorful fruits. These fruits are not only delicious but also packed with essential nutrients, vitamins, and dietary fiber, offering a nutritious and healthy option. Additionally, the presence of these healthy plants attracts pollinators, supports ecosystem balance, and contributes to biodiversity by providing habitat and food sources for beneficial insects and wildlife.",
+            cause: "The causes of a healthy raspberry plant include providing suitable growing conditions, ensuring nutrient availability, and implementing pest control measures. Also, factors such as proper sunlight, well-draining soil, balanced nutrition, disease resistance, and effective pest management contribute to the plant's well-being. Additionally, practicing pruning and training techniques helps maintain the raspberry plant's structure and airflow, reducing disease susceptibility and promoting overall health.",
+            medicine: "There is no specific medicine or treatment for a healthy raspberry plant. Generally, a healthy raspberry plant does not require medication or intervention. However, regular care and maintenance practices, such as providing appropriate water, sunlight, nutrients, and disease prevention measures like proper pruning and pest control, can help maintain the plant's health and prevent potential issues. Such is important to monitor the plant for any signs of diseases, pests, or nutrient deficiencies and take appropriate action if necessary.",
+            prevention: "In order to prevent diseases in Raspberry plants, the best approach is to maintain their health and provide proper care. Careful observation is crucial when issues occur, focusing on the affected parts such as leaves, fruit, primocanes, or floricanes. Then, an accurate diagnosis plays a vital role in taking appropriate measures to address problems effectively as they arise, ensuring the well-being of the Raspberry plant.",
+            link: "https://extension.umn.edu/fruit/growing-raspberries-home-garden",
+        },
+        21: {
+            name: 'Soybean',
+            disease: 'Healthy',
+            description: "A healthy soybean plant typically has leaves with a vibrant green color indicating efficient chlorophyll production, a medium-sized compound structure with smooth and flat leaflets attached to a central petiole, a glossy surface reflecting optimal moisture levels, well-defined and evenly distributed veins for nutrient transport, secure attachment of leaflets to the petiole, and an absence of symptoms such as spots, discoloration, or insect damage. Regular monitoring and appropriate care, including proper watering, fertilization, and pest control, contribute to the maintenance of healthy soybean leaves.",
+            effects: "A healthy soybean plant demonstrates positive effects such as efficient photosynthesis that influences the production of energy and sugars heavily. Such also plays a vital role in absorbing and assimilating nutrients from the soil, supporting overall plant health. Ultimately, healthy soybean plants contribute to the plant's yield potential by facilitating flower and pod development, resulting in a higher soybean yield.",
+            cause: "The health of a soybean plant is influenced by various factors, which include adequate sunlight for optimal growth and development, healthy soil that provides essential nutrients, water availability, proper cultural practices, such as timely planting, appropriate spacing, as well as regular monitoring, and an effective pest and disease management practices",
+            medicine: "Healthy soybean plants do not require medication or specific treatments. However, if issues such as diseases or pests arise, appropriate medicine or treatments may be available in fungicides, insecticides, or other agricultural products designed for soybean crop protection. Such is important to carefully follow the instructions and guidelines provided by agricultural experts or professionals when considering such products to address any specific issues that may arise.",
+            prevention: "In order to maintain a healthy soybean plant involves practices such as crop rotation, proper irrigation, nutrient management, effective weed control, monitoring pests and diseases, and timely harvest. These measures contribute to a healthier growing environment, optimal nutrient supply, reduced competition from weeds, early detection and management of pests and diseases, and maximized yield and seed quality. Implementing these practices supports the overall health and productivity of soybean plants.",
+            link: "https://www.ndsu.edu/agriculture/ag-hub/publications/soybean-growth-and-management-quick-guide",
+        },
+        22: {
+            name: 'Squash',
+            disease: 'Powdery Mildew',
+            description: "Powdery mildews are identifiable due to the distinct white, powdery fungal growth observed on affected parts of the host plant. The powdery appearance is caused by the superficial development of the fungus in the form of thread-like strands called hyphae, which spread over the plant surface and produce chains of spores known as conidia. The visible presence of these white powdery growths serves as a characteristic feature in identifying powdery mildew infections on plants.",
+            effects: "Fortunately, powdery mildew primarily impacts the aesthetics of plants as the fungi reside on the leaf surface and do not penetrate the leaf tissue. However, if squash leaves accumulate a thick layer of powdery mildew, such hampers their ability to photosynthesize, potentially leading to decreased productivity and lower yields over time. In severe cases, the affected leaves may wither and die, with the possibility of rot spreading to the plant's crown. Additionally, powdery mildew can weaken the squash plants' resistance to other pests and diseases, making them more susceptible to issues with pests like squash bugs, vine borers, botrytis, and other diseases.",
+            cause: "Powdery mildew, a prevalent disease affecting various cucurbits, including squash and pumpkin, is caused by a fungal infection. The disease spreads through the release of airborne spores, allowing such to travel significant distances in search of vulnerable host plants. These spores can be carried by wind or other means, increasing the likelihood of infection in susceptible plant species.",
+            medicine: "If the baking soda is combined with horticultural grade or dormant oil and liquid soap, that can be an effective organic solution for powdery mildew. The mixture consists of one tablespoon of baking soda, a teaspoon of dormant oil, and a teaspoon of insecticidal or liquid soap, all mixed in a gallon of water. Applying the solution every one to two weeks, especially in the early stages or before an outbreak occurs, can provide good efficacy. Another option is potassium bicarbonate, which prevents and eliminates powdery mildew. Such acts as a contact fungicide and is approved for use in organic growing.",
+            prevention: "In order to prevent squash powdery mildew, one must promote good air circulation by spacing squash plants apart, avoiding contact between infected and healthy leaves, and selectively pruning leaves to reduce humidity and limit spore spread. Then, one must Choose sunny planting locations to minimize moisture and discourage spore germination, promptly remove and dispose of infected leaves to prevent further infection, avoid applying nitrogen fertilizer during the growing season, and consider planting resistant squash varieties to reduce the risk of powdery mildew.",
+            link: "https://extension.umaine.edu/gardening/2022/08/26/is-there-a-natural-remedy-for-treating-powdery-mildew-of-squash-and-pumpkin/#:~:text=Powdery%20Mildew%20of%20Squash%20and%20Pumpkin%20is%20a%20very%20common,distances%20to%20find%20susceptible%20hosts.",
+        },
+        23: {
+            name: 'Strawberry',
+            disease: 'Healthy',
+            description: "A healthy strawberry plant displays leaves organized in clusters of 3, characterized by a serrated edge and varying shades of green that correspond to their age. The leaves should have a uniform coloration without any marks or imperfections. These foliages emerge from visible runners above the soil, with the highest leaves typically reaching a height of 4 to 6 inches from the ground.",
+            effects: "A thriving strawberry plant exhibits beneficial outcomes, such as robust growth characterized by vigorous runners and ample foliage. Such produces an abundance of flowers, leading to a higher yield of top-quality strawberries that are visually appealing and flavorful. The overall productivity of the plant is enhanced, along with its resilience to diseases and pests. Furthermore, a well-cared-for and healthy strawberry plant has the potential for a prolonged lifespan, enabling multiple years of fruitful harvests.",
+            cause: "A healthy strawberry plant is the result of various factors. These include the important role of leaves in photosynthesis, where they convert sunlight into energy for growth, and the green color of leaves is due to chlorophyll, which is essential for efficient energy capture. Moreover, nutrient uptake from the soil and proper hydration through water absorption are also crucial for plant health. The inherent genetics of strawberry plants can influence leaf health, with some cultivars naturally exhibiting robust foliage.",
+            medicine: "Typically, there is no need for specific medications to keep strawberry plants healthy. The plant only needs adequate sunlight, water, nutrients, good garden hygiene, and weed control. However, if the strawberry plant encounters diseases or pests, there are some fungicides and insecticides available in the market that can be used as necessary. Such is important to carefully follow the instructions and recommendations on the product labels and consult with local gardening experts or agricultural extension services for guidance on suitable treatments for your specific region and plant health needs.",
+            prevention: "In order to maintain a healthy strawberry plant, one must remove weeds and dead leaves from the berry patch. In colder regions, such is advisable to protect the newly formed buds by covering strawberry plants with a winter mulch like straw, pine straw, chopped leaves, or untreated grass clippings. This practice not only gives these delicious berries their name but also helps control weeds, reduce watering needs, and keep the berries clean during the growing season. Also, adequate watering is essential for strawberry plants, so regularly check the soil moisture and provide water when the top inch becomes dry. Accordingly, drip irrigation is recommended as such keeps the leaves and fruit dry, minimizing the risk of disease outbreaks.",
+            link: "https://www.weekand.com/home-garden/article/strawberry-leaves-look-like-18038928.php",
+        },
+        24: {
+            name: 'Strawberry',
+            disease: 'Leaf Scorch',
+            description: "Leaf scorch causes strawberry leaves to appear as if they have been burned. Early signs of leaf scorch include the presence of irregular dark purple or brown spots scattered on the leaf surface as well as the appearance of tar drops. These spots may have purple centers without clear borders, distinguishing them from leaf spot disease. As the disease progresses, the symptoms worsen and become more visually unappealing, with large sunken lesions formed by merged spots, purplish to brown areas that can encircle and weaken leaves from the base, curled and brown leaves, scorched and dying leaves, reduced vigor, and in severe cases, dead leaves, flowers, or fruit.",
+            effects: "A strawberry plant can experience a decline in strength, leading to a decrease in the number and vitality of crowns. The infection makes the plants more susceptible to stress from winter conditions and drought. In severe cases, the presence of a large number of pests can cause flowers and fruit to wither and perish.",
+            cause: "Leaf scorch is caused by the fungus Diplocarpon earliana. Symptoms of leaf scorch consist of numerous small, irregular, purplish spots or blotches that develop on the upper surface of leaves. The centers of the blotches become brownish. Blotches may coalesce until they nearly cover the leaflet, which appears purplish to reddish to brown.",
+            medicine: "Once the leaf scorch fungus infects your leaves, there are limited actions you can take. While this may negatively impact the appearance of your plants, such is unlikely to significantly affect your fruit harvest. The primary treatment methods involve removing the infected leaves.",
+            prevention: "In order to prevent leaf scorch and other fungal diseases in strawberries, follow the following key preventive measures. One must treat strawberries as annual plants, provide adequate spacing for airflow, avoid overhead irrigation, control weeds, limit nitrogen application, remove plant debris at the end of the season, use mulch or landscape fabric, and ensure proper drainage. By implementing these measures, you can reduce plant stress and maintain optimal moisture levels, minimizing the risk of leaf scorch and promoting healthier strawberry plants.",
+            link: "https://www.allaboutgardening.com/strawberry-diseases/",
+        },
+        25: {
+            name: 'Tomato',
+            disease: 'Bacterial Spot',
+            description: "Bacterial spot affects both young seedlings and mature plants. In seedlings, infections can cause significant leaf loss. On older plants, the infection primarily targets older leaves, resulting in water-soaked areas that transition from yellow or light green to black or dark brown. The spots on the leaves are black, slightly raised, and measure up to 0.3 inches in diameter. Larger blotches may also appear, especially at the leaf margins. Immature fruit initially shows slightly sunken spots surrounded by a water-soaked halo, which later disappears. The spots on the fruit expand, turn brown, and become scabby.",
+            effects: "Bacterial spot disease can have detrimental effects on tomato plants. Such causes damage to the leaves, resulting in water-soaked areas that turn yellow, black, or dark brown. The disease can also affect the fruit, causing sunken spots with a water-soaked halo that later turn brown and become scabby. Additionally, severe cases of bacterial spots can lead to defoliation, weakening the plants and reducing their overall productivity. These combined effects can result in a decrease in tomato yield and lower-quality fruit. Proper management and preventive measures are crucial in minimizing the impact of bacterial spots on tomato crops.",
+            cause: "Bacterial spot in tomatoes is caused by different types of bacteria, namely Xanthomonas vesicatoria, Xanthomonas euvesicatoria, Xanthomonas gardneri, and Xanthomonas perforans. These bacterial pathogens can enter a garden through contaminated seeds or transplants, even if they don't show immediate symptoms. They infect plants through natural openings like stomates or through wounds. The development of the disease favors warm and wet weather conditions, particularly temperatures ranging from 75°F to 86°F. Rains driven by wind can exacerbate the disease by splashing the bacteria onto healthy leaves and fruit. While bacterial pathogens can survive well in tomato debris, their survival is significantly reduced in soil without any associated debris.",
+            medicine: "The hot water treatment at a temperature of 122°F for 25 minutes can effectively decrease the bacterial population on the surface and inside the seeds. However, such is important to ensure proper temperature control during this process to avoid potential negative effects on seed germination. After the treatment, such is recommended to rinse the seeds with clean water immediately. Before storing, allow these seeds to air dry thoroughly.",
+            prevention: "In order to minimize the risk of diseases and maximize the health of tomato plants, several practices can be followed. First, cover the soil beneath the plants with mulch, such as landscape fabric or straw, to prevent disease-causing organisms in the soil from splashing onto the lower leaves. Secondly, water the soil directly instead of wetting the leaves to avoid providing favorable conditions for fungal and bacterial infections. Such is recommended to stake or trellis tomato plants to improve air circulation, reduce fruit rot, and ensure quick drying of leaves after rainfall. Additionally, avoid working with tomato plants when the leaves are wet to prevent the spread of bacteria and maintain good air movement around the plants by spacing them adequately apart. Lastly, implement crop rotation by allowing at least two years before replanting tomatoes or peppers in the same area and avoid saving seeds from infected plants. These practices collectively contribute to the overall protection and well-being of tomato plants.",
+            link: "https://extension.umn.edu/plant-diseases/tomato-leaf-spot-diseases",
+        },
+        26: {
+            name: 'Tomato',
+            disease: 'Early Blight',
+            description: "Early blight primarily affects tomato plants under stress or reaching the end of their life cycle. The disease initially appears on the oldest leaves, causing circular to angular, dark brown lesions measuring around 0.12 to 0.16 inches in diameter. These lesions often display concentric rings, creating a distinct target-like pattern. Leaves that are heavily infected turn yellow and eventually fall off. Under infected tubers, a dry, brown, corky rot can be observed.",
+            effects: "The stem of a tomato plant will undergo a transformation in which such becomes brown, sunken, and dry, a condition known as collar rot. If the infection completely encircles the stem, young seedlings wilt and eventually perish. On mature tomato plants, stem infections manifest as oval to irregular, dry brown patches with distinct dark brown rings. The disease can also affect fruits at any stage of their development.",
+            cause: "The main culprit behind the disease is the fungus Alternaria linariae, previously known as A. solani. However, such is worth noting that other species of Alternaria can also be found in the affected lesions.",
+            medicine: "Timely intervention is crucial when dealing with tomatoes affected by early blight to prevent the disease from spreading. Such is recommended to spray the entire plant, including the undersides of leaves, with either Bonide Liquid Copper Fungicide concentrate or Bonide Tomato & Vegetable spray. These treatments are organic and effective in combating early blight.",
+            prevention: "In order to prevent early blight, such are advised to place mulch, such as fabric, straw, plastic mulch, or dried leaves, on the soil around the plants. Also, watering should be done directly at the base of each plant using drip irrigation, a soaker hose, or precise hand watering. Accordingly, trimming the lower leaves can help minimize the risk of early blight spores splashing onto the leaves from the soil.",
+            link: "https://content.ces.ncsu.edu/early-blight-of-tomato",
+        },
+        27: {
+            name: 'Tomato',
+            disease: 'Healthy',
+            description: "A healthy tomato plant should have lush, supple leaves in various shades of green and strong stems. Any presence of yellowing, pale coloration, dark or tattered patches or edges, spotting, or mildew on the leaves indicates a potential issue.",
+            effects: "A healthy tomato plant has several positive effects. Such contributes to the overall vigor and productivity by efficiently harnessing sunlight for photosynthesis. Also, healthy leaves of the plant help produce the energy needed for growth, fruit development, and ripening. They also provide a larger surface area for transpiration, aiding in the regulation of water balance within the plant. Additionally, healthy tomato plants enhance the ability to fend off pests and diseases, promoting better yield and quality of tomatoes.",
+            cause: "Healthy tomato plants in the field depend on factors such as nutrient balance, sufficient sunlight, proper watering, pest management, and good cultural practices. The creation of favorable growing conditions, providing adequate care, and implementing proactive management techniques are essential for maintaining the health of tomato leaves in the field.",
+            medicine: "There are no specific treatments or medicines for maintaining a healthy tomato plant. However, one can suggest using high-quality compost as a fertilizer to provide essential micronutrients. Applying well-decomposed, dark, and crumbly compost annually not only enhances the nutrient content of the soil but also improves its structure, promoting the healthy growth of tomato plants.",
+            prevention: "In order to maintain a healthy tomato plant, this needs a weekly water supply of 1 to 2 inches. Such is beneficial to water deeply but infrequently to promote a robust root system rather than providing light daily watering. Then, fertilize the plants every 4 to 6 weeks during the growing season to ensure continuous nourishment and the production of juicy tomatoes. Consider using a fertilizer that includes bone meal, for as such contributes calcium and helps prevent blossom end rot.",
+            link: "https://www.tomatofest.com/common_tomato_problems_s/118.htm#:~:text=Healthy%20tomato%20plants%20should%20display,are%20indicative%20of%20a%20problem.",
+        },
+        28: {
+            name: 'Tomato',
+            disease: 'Late Blight',
+            description: "Initial signs of late blight on tomato plants manifest as small, wet spots in the leaves that quickly expand and transform into purple-brown, shiny patches. Underneath such leaves, you may observe circular formations of grayish-white mycelium and structures that produce spores surrounding these patches.",
+            effects: "When a tomato plant is infected by late blight, the entire leaves perish, and the infections swiftly extend to the petioles and young stems. Infected fruit undergoes a browning process but retains their firmness unless they are further affected by secondary decay organisms. Typically, the symptoms initiate on the upper parts of the fruit as spores settle on them from above.",
+            cause: "Tomato late blight is caused by the oomycete pathogen Phytophthora infestans, which primarily affects tomato plants. This destructive disease is characterized by water-soaked areas on the leaves, which rapidly enlarge and develop into purple-brown, oily-appearing blotches. As the infection progresses, entire leaves may wither and die and can spread to the petioles and young stems. Infected fruit typically turns brown but remains firm unless secondary decay organisms also infect them. Symptoms of late blight on tomatoes often begin on the shoulders of the fruit, as spores tend to land on the fruit from above.",
+            medicine: "The application of fungicides is the most efficient method for preventing late blight. Conventional gardeners and commercial producers can use protective fungicides such as chlorothalonil and mancozeb to safeguard against the disease.",
+            prevention: "When late blight in a tomato plant is confirmed, take immediate action to contain the spread. Consequently, remove any infected leaves promptly and dispose of them by burning or placing them in sealed garbage bags. In order to prevent fungal spores in the soil from splashing onto the plant, apply a layer of natural mulch, such as straw or wood chips, around the base of the plant.",
+            link: "https://extension.wvu.edu/lawn-gardening-pests/plant-disease/fruit-vegetable-diseases/late-blight-tomatoes#:~:text=Spraying%20fungicides%20is%20the%20most,(Manzate)%20can%20be%20used. ",
+        },
+        29: {
+            name: 'Tomato',
+            disease: 'Leaf Mold',
+            description: 'Leaf mold is a common fungal disease that targets the foliage of tomato plants if they are grown particularly in greenhouse settings. This particular disease shares some similarities in the symptoms with other foliar diseases, such as grey mold or tomato blight, which can often lead to confusion during diagnosis. Such is important for tomato growers, especially those cultivating plants in greenhouses, to be aware of the distinct characteristics and signs of leaf mold to manage and control the spread.',
+            effects: 'Typically, the foliage bears the brunt of the infection, with other parts of the plant remaining relatively unaffected. When the infection takes hold, the leaves that are infected will gradually deteriorate, leading to their eventual withering and death. This decline in the health of the foliage can have an indirect impact on the overall yield of the plant. In more severe instances, the infection can spread beyond the leaves and extend to the blossoms and fruit of the plant. This direct contamination of the blossoms and fruit significantly diminishes the yield potential. The infected blossoms may fail to develop into healthy fruits, and any existing fruit may succumb to the infection, resulting in a direct reduction in the yield of the plant.',
+            cause: "Tomato leaf mold is caused by the fungus Passalora fulva (also known as Cladosporium fulvum). This fungal pathogen specifically targets live tomato leaves and enters the plant through the stomata, disrupting the plant's respiratory process. As a consequence, affected tomato plants may experience wilting, defoliation, and increased vulnerability to further infection.",
+            medicine: 'To prevent the spread of diseases on tomatoes, it is important to take certain measures. Firstly, remove and destroy all affected plant parts. If you are growing plants in enclosed spaces, make sure to increase ventilation and, if feasible, create more space between the plants. When watering the plants, especially in the evening, try to avoid wetting the leaves as it can contribute to disease development. Instead, focus on watering the soil directly. In order to control diseases on tomatoes, copper-based fungicides can be utilized. These fungicides have proven to be effective in managing the spread of diseases. By implementing these practices, you can help protect your tomato plants from the harmful effects of diseases and promote their overall health and productivity.',
+            prevention: 'To manage leaf spot diseases effectively, there are several recommended actions to take. Staking and applying mulch to the plants, as well as removing infected leaves through pinching, contribute to controlling these diseases. It is also important to enhance air circulation around the plants, as this aids in reducing humidity and preventing the spread of pathogens. To maintain dry leaves and minimize disease development, it is advisable to water the plants at the base rather than overhead. Additionally, it is crucial not to save seeds from infected plants, as this can perpetuate the presence of the disease in future crops. Fortunately, leaf spots should not significantly impact the fruit production of your plants. By implementing these preventive measures and promptly addressing any signs of leaf spot diseases, you can promote healthier plants and ensure optimal fruit yield',
+            link: 'https://extension.umn.edu/disease-management/tomato-leaf-mold#correct-identification-of-tomato-issues-2982360',
+        },
+        30: {
+            name: 'Tomato',
+            disease: 'Septoria Leaf Spot',
+            description: 'Septoria leaf spot typically emerges on the lower leaves once the first fruits have developed. The spots are round, measuring approximately 1/16 to 1/4 inch in diameter. They feature dark brown edges and tan to gray centers adorned with small black structures where fruits form. A notable characteristic of this disease is the abundance of spots found on each leaf.',
+            effects: "If left untreated, Septoria leaf spot will lead to yellowing of the leaves, followed by drying out and eventual leaf drop. This weakens the plant, pushing it into a state of decline and making the tomatoes vulnerable to sun scalding. Without the protection of leaves, the plant's ability to produce and ripen tomatoes is compromised. Septoria leaf spot is known to spread quickly, further exacerbating the damage it can cause.",
+            cause: 'Septoria leaf spot is primarily caused by the fungal pathogen Septoria lycopersici. This particular fungus has the ability to infect tomatoes at various stages of growth, although initial symptoms tend to manifest on the older, lower leaves and stems when the plants are in the process of fruiting. While leaf surfaces are typically the most affected, the symptoms may also extend to the petioles, stems, and even the calyx of the tomato plant',
+            medicine: 'Septoria leaf spot can be effectively managed by utilizing fungicides that contain maneb, mancozeb, or chlorothalonil. It is recommended to apply these fungicides at regular intervals of 7 to 10 days throughout the growing season, with particular focus during the flowering and fruit setting stages. It is crucial to adhere to the harvest restrictions specified on the pesticide label to ensure the safety and quality of the harvested tomatoes.',
+            prevention: "To prevent the spread of the disease, it is important to promptly remove infected leaves. Ensure that you wash your hands and pruners thoroughly before handling healthy plants to prevent contamination. For organic alternatives, consider using fungicides that contain copper or potassium bicarbonate. These can be applied as soon as the first symptoms are noticed, following the instructions provided on the label for ongoing management. In cases of advanced infections where other methods are not effective, chemical fungicides may be necessary. While not the preferred option, chlorothalonil (available as Fungonil and Daconil) is considered one of the least toxic and most efficient choices for control.",
+            link: 'https://www.missouribotanicalgarden.org/gardens-gardening/your-garden/help-for-the-home-gardener/advice-tips-resources/pests-and-problems/diseases/fungal-spots/septoria-leaf-spot-of-tomato#:~:text=Septoria%20leaf%20spot%20usually%20appears,are%20many%20spots%20per%20leaf.',
+        },
+        31: {
+            name: 'Tomato',
+            disease: 'Spider Mites',
+            description: 'The tomato red spider mite can be observed on the upper and lower surfaces of leaves, with a preference for the undersides near the leaf veins. Its feeding activity leads to the development of yellowish white and mottled patches on the leaves. Furthermore, the tomato red spider mite is known to produce webbing, particularly on the undersides of leaves. In cases of severe infestation, the dense webbing can have a detrimental effect on the affected plants, potentially causing them to wither and dry out.',
+            effects: 'The presence of tomato red spider mites on tomato plants can result in leaf defoliation, where the leaves gradually wither and fall off. In cases of a severe infestation, the plants may be significantly weakened and could even succumb to the attack, leading to their demise. It is crucial to promptly address and control the infestation to prevent further damage and potential plant loss.',
+            cause: 'Spider mites can infest tomato plants as a result of certain conditions such as drought, insufficient moisture, and dry weather. These environmental factors provide an ideal setting for the proliferation of spider mites. Over-fertilizing tomato plants can also make them more susceptible to these pests. Therefore, it is important to maintain proper moisture levels and avoid excessive fertilization to minimize the risk of spider mite infestations on your tomato plants.',
+            medicine: 'When treating mites on tomato plants, it is advisable to use targeted remedies, with a preference for insecticidal soap or insecticidal oil. These selective options are effective in combating mites. Horticultural oils derived from petroleum and plant-based oils like neem, canola, or cottonseed oils are suitable choices for controlling mites on tomato plants.',
+            prevention: 'Regularly washing trees and vines during the middle of the growing season with water to remove dust can be a preventive measure against severe mite infestations later in the season. In home gardens and on small fruit trees, consistently and vigorously spraying plants with water can effectively reduce the population of spider mites to a satisfactory level.',
+            link: 'https://ipm.ucanr.edu/PMG/PESTNOTES/pn7405.html#:~:text=If%20a%20treatment%20for%20mites,or%20cottonseed%20oils%20are%20acceptable.',
+        },
+        32: {
+            name: 'Tomato',
+            disease: 'Target Spot',
+            description: 'The disease initially appears on the older leaves and gradually extends upwards. It is characterized by the development of irregular-shaped spots with a yellow margin. As the disease progresses, some of the spots enlarge and exhibit distinct concentric rings, resembling a target pattern. This phenomenon is why it is commonly referred to as "target spot." The spread of the disease to all leaflets and other leaves occurs rapidly, leading to yellowing, wilting, and eventual death of the affected leaves. Additionally, the stems may also display long and narrow spots. Furthermore, small light brown spots with dark margins may be observed on the fruit.',
+            effects: 'The fungus is responsible for significant leaf loss in plants, making it a prominent disease. If the infection takes place before the fruit has fully developed, it can lead to low yields. This disease is widespread among tomato plants in Pacific island countries and affects both screen house and field cultivation environments.',
+            cause: "The spores of the fungus are disseminated through rainfall carried by wind, and if there are consecutive days of wet and windy weather, the spread of the disease occurs rapidly, resulting in the rapid defoliation of plants.The fungus originates from various sources, including other crops, the remnants of the previous crop, and potentially other plant species serving as hosts. On papaya leaves, the fungus is frequently found, causing the formation of angular spots that are light brown or grey in color and measure approximately 2 mm in diameter. These spots are often surrounded by a yellow margin, and the centers of the spots may disintegrate, creating a distinctive 'shot-hole' appearance.",
+            medicine: 'The disease thrives in warm and wet conditions, making the use of fungicides necessary for effective control. Recommended fungicides for combating the disease include chlorothalonil, copper oxychloride, and mancozeb. Treatment should commence as soon as the first spots are observed and be repeated at intervals of 10 to 14 days until 3 to 4 weeks before the final harvest.',
+            prevention: 'Support tomato plants by either using cages or staking them to elevate them from the ground. Water the plants in the morning to allow sufficient time for the leaves to dry. Direct the water at the base of the plant or utilize a soaker hose or drip irrigation system to prevent moisture from reaching the leaves. Apply mulch around the plants to create a barrier between the fruit and the soil, minimizing direct contact.',
+            link: 'https://www.gardeningknowhow.com/edible/vegetables/tomato/target-spot-on-tomatoes.htm#:~:text=Cage%20or%20stake%20tomato%20plants,direct%20contact%20with%20the%20soil.',
+        },
+        33: {
+            name: 'Tomato',
+            disease: 'Mosaic Virus',
+            description: 'Tomato Mosaic Virus (ToMV) results in the development of yellow mosaic symptoms on both tomato leaves and fruits. The affected foliage exhibits a pattern of mottling or mosaic appearance, characterized by patches of lighter and darker green coloration. In some cases, younger leaves may show distortion along with the mosaic leaf mottle. This reaction is frequently observed during the summer months in greenhouse environments.',
+            effects: 'The virus can have a significant impact on fruit production, with infected plants experiencing a reduction in fruit set. The fruits that do develop may display yellow blotches and necrotic spots, while the interior of the fruit may turn brown. In addition to the leaves and fruit, the stems, petioles, and other plant parts can also show signs of infection.',
+            cause: 'The Tomato Mosaic Virus (ToMV) is primarily caused by the Tomato mosaic virus pathogen. It can be transmitted through infected plants, mechanical contact, insect vectors, and contaminated tools or equipment. Insects such as aphids and whiteflies can carry and spread the virus while feeding on plant sap. Additionally, the virus can be present in infected seeds. Prevention measures, such as using disease-free seeds, practicing good hygiene, and implementing effective pest management strategies, are important in minimizing the risk of Tomato Mosaic Virus infection.',
+            medicine: "Managing mosaic virus is challenging, as it lacks chemical remedies commonly available for fungal diseases. However, certain tomato varieties show resistance to the virus, and disease-free seeds can be purchased with certification. To control tobacco mosaic virus, prioritizing sanitation is crucial. Tools should undergo a five-minute boiling process followed by thorough washing using a strong detergent. It's important to note that bleaching is ineffective for viral decontamination. Additionally, any stunted or distorted seedlings should be eliminated, and tools and hands should be decontaminated appropriately.",
+            prevention: 'Maintaining a weed-free and debris-free environment around tomato plants is essential to reduce potential harboring sites for the disease. It is also important to control insects as they can contribute to the spread of the virus. In the event that the disease is observed in the garden, prompt action should be taken by digging up and burning the infected plants. It is advisable to avoid planting susceptible plants such as tomatoes and cucumbers in the same area again to prevent the recurrence of mosaic virus.',
+            link: 'https://www.creative-diagnostics.com/blog/index.php/what-is-tomato-mosaic-virus/#:~:text=ToMV%20causes%20yellow%20mosaic%20symptoms,reaction%20in%20summer%20in%20glasshouses.',
+        },
+        34: {
+            name: 'Tomato',
+            disease: 'Yellow Leaf Curl Virus',
+            description: 'Tomato yellow leaf curl virus belongs to the Geminiviridae family and primarily infects tomato plants, leading to significant incidences of the virus in the field. While it can infect various plant species to some extent, tomatoes serve as the ideal host for the virus, allowing it to thrive. Other solanaceous crops can also be infected, often without showing noticeable symptoms, and certain weeds such as nightshade and jimsonweed can serve as alternative hosts for the virus',
+            effects: 'Affected plants exhibit stunted or dwarfed growth, with new growth appearing only after the infection has diminished in size. The leaflets display an upward and inward rolling pattern, while the leaves themselves exhibit a downward bending, stiffness, and a thicker, leathery texture. Interveinal chlorosis, wrinkling, and slight chlorosis of young leaves are also common symptoms. Despite normal-looking flowers, any fruits produced are typically small, dry, and unsuitable for sale. The distribution of affected plants tends to be random or in patchy patterns',
+            cause: 'The main method of short-distance transmission for the virus is through certain species of Bemisia whiteflies. These whiteflies facilitate the spread of the virus within a relatively close range. For long-distance transmission, the virus primarily relies on the movement of infected plants, particularly tomato transplants. Since it can take several weeks for symptoms to appear, asymptomatic plants carrying the virus may unknowingly be transported. Additionally, the virus can be transported over long distances by whiteflies carrying the virus, which can hitch a ride on tomatoes or other plants (such as ornamentals), or through natural phenomena like high winds, hurricanes, or tropical storms.',
+            medicine: ' After the virus has infected the plants, there are no available treatments to combat the infection. However, it is important to focus on controlling the population of whiteflies to prevent virus transmission. The use of insecticides belonging to the pyrethroid family can help reduce the whitefly population when applied as soil drenches or sprays during the seedling stage. By implementing these measures, the risk of whitefly-mediated virus infection can be minimized.',
+            prevention: 'To minimize the occurrence of tomato yellow leaf curl, it is advisable to choose tomato varieties that are less susceptible to this condition. It is important to ensure that the soil has sufficient moisture, as this can help in preventing leaf curl. Care should be taken to avoid excessive application of nitrogen-based fertilizers, as they can contribute to the development of leaf curl. When dealing with indeterminate tomato varieties, pruning should be done conservatively to promote healthy growth. Additionally, providing shade to plants in situations of high temperatures can help prevent leaf curl, whenever feasible.',
+            link: 'https://plantix.net/en/library/plant-diseases/200036/tomato-yellow-leaf-curl-virus/',
+        },
+        35: {
+            name: 'Apple',
+            disease: 'Cedar Rust',
+            description: 'Cedar-apple rust, along with other rust diseases, is caused by various fungal species belonging to the genus Gymnosporangium. The presence of cedar-apple rust negatively impacts the overall well-being and vitality of apple trees by causing early leaf drop and diminishing the quality of the fruit produced.',
+            effects: 'cedar apple rust can negatively impact the overall health and vigor of apple trees, potentially resulting in reduced fruit quality.',
+            cause: 'The lesions characterized by orange and red spots found on apple tree leaves are a result of the presence of the cedar apple rust fungus, known as Gymnosporangium juniperi-virginianae. This particular fungus relies on two distinct host species, one belonging to the juniper family and the other to the rose family, in order to complete its life cycle',
+            medicine: 'Homeowners have access to the fungicide myclobutanil, commonly known as Immunox, which is an effective option for controlling apple scab and cedar apple rust. It is important to note that there are multiple formulations of Immunox available, but only one is specifically labeled for use on fruit-bearing plants. Before applying any fungicide to your plants, especially those that produce edible fruits, it is crucial to carefully read and follow the instructions provided on the product label to ensure its safe and appropriate use.',
+            prevention: "Choosing resistant cultivars, when available, can be an effective strategy to minimize the susceptibility of apple trees to cedar apple rust. Additionally, it is important to maintain good orchard hygiene by regularly removing fallen leaves and debris from the area surrounding the trees. This practice helps eliminate potential sources of infection and reduces the risk of disease spread. In cases where juniper plants are infected with cedar apple rust, it is recommended to remove the galls and, if necessary, consider removing the entire juniper plant, especially in severe instances. By implementing these measures, it is possible to mitigate the impact of cedar apple rust and promote healthier apple tree growth.",
+            link: 'https://extension.unl.edu/statewide/knox/cedar-apple-rust-apple-scab-spray-now/#:~:text=The%20fungicide%20myclobutanil%20(Immunox)%20is,edible%20plants%2C%20check%20the%20label.',
+        },
+        36: {
+            name: 'Potato',
+            disease: 'Healthy',
+            description: "A robust potato leaf is typically characterized by its lush green hue and vitality. It exhibits a smooth and uniform texture, devoid of any noticeable blemishes or color irregularities. The leaf maintains a firm and turgid structure, showcasing well-defined veins branching out from the central midrib. Its surface possesses a glossy and waxy sheen, reflecting light. Overall, a healthy potato leaf contributes to the plant's overall vigor, conveying a vibrant and thriving appearance.",
+            effects: "It displays well-developed and abundant foliage, with leaves that are green, lush, and free from discoloration or spots. The plant's stem and branches are sturdy, providing excellent support for the foliage and ensuring upright growth. The roots are strong and well-established, allowing for efficient nutrient uptake from the soil. In terms of yield, a healthy potato plant produces a substantial number of tubers that are of good size, uniform in shape, and free from blemishes or deformities. The plant also demonstrates resilience against pests, diseases, and environmental stresses, enabling it to thrive and reach its full potential. Overall, a healthy potato plant exhibits optimal growth, robust appearance, and the ability to produce high-quality and abundant harvests.",
+            cause: 'A healthy potato leaf can be attributed to various factors. Ample sunlight exposure facilitates photosynthesis, which enables the leaf to produce necessary nutrients and energy. Optimal soil nutrition, including balanced levels of nitrogen, phosphorus, and potassium, promotes the development of a healthy leaf. Satisfactory water availability ensures proper hydration and turgidity of the leaf cells. Effective management of pests and diseases helps prevent damage to the leaf. Additionally, genetic factors and proper plant care practices, such as appropriate spacing and pruning, contribute to maintaining the overall health and vitality of a potato leaf.',
+            medicine: "In general, healthy potato plants do not require specific medicine or treatments. However, it is important to provide them with proper nutrition for optimal growth. Fertilizers, both organic (such as manures and compost) and inorganic (such as chemicals), can be used to enhance soil fertility and provide necessary nutrients. Organic materials should be incorporated into the soil before planting, while commercial nitrogen fertilizers can be used in combination with manure containing straw or sawdust. If the soil has been properly amended with organic materials, nitrogen is usually the only nutrient needed. Commercial nitrogen fertilizers like urea, ammonium sulfate, calcium nitrate, and ammonium nitrate can be applied at specific rates. If organic materials haven't been used, a fertilizer containing nitrogen and phosphorus can be applied before planting. Commercial fertilizers are labeled with N-P-K percentages, indicating nitrogen, phosphorus, and potassium content. Mixed fertilizers like 5-10-5, 5-10-10, 8-16-16, and 12-12-12 can be applied at recommended rates. After the plants have grown to a certain height, additional nitrogen can be applied through narrow bands or furrows, ensuring thorough watering afterwards. Light and frequent applications of nitrogen fertilizer every 3 to 4 weeks can also be considered, taking care to avoid direct contact with plant stems to prevent burning.",
+            prevention: "To ensure the healthy growth of your potato plants, it is crucial to maintain consistent moisture levels, particularly once the flowers have bloomed. Providing them with 1 to 2 inches of water per week is essential. It's important to strike a balance, as excessive watering immediately after planting and insufficient watering during potato formation can lead to irregular shapes. As the foliage starts to turn yellow and die off, it's a sign to cease watering, allowing the plants to naturally progress through their growth cycle. By diligently managing moisture levels, you can support the optimal development of your potato plants and promote a successful harvest.",
+            link: 'https://www.almanac.com/plant/potatoes#:~:text=Maintain%20even%20moisture%2C%20especially%20from,turn%20yellow%20and%20die%20off.',
+        },
+        37: {
+            name: 'Potato',
+            disease: 'Late Blight',
+            description: 'Late blight is a highly destructive disease that poses a significant threat to tomato and potato crops. It has the ability to infect various plant parts, including leaves, stems, tomato fruit, and potato tubers. The rapid spread of this disease within fields can lead to a complete loss of the crop if left untreated',
+            effects: 'Late blight, caused by the fungus Phytophthora infestans, is a highly significant potato disease that can lead to rapid crop failure if proper control methods are not implemented. It is considered the most critical disease affecting potatoes, emphasizing the importance of taking appropriate measures to prevent its spread and minimize the risk of crop losses.',
+            cause: 'The fungus Phytophthora infestans is responsible for the development of Late Blight. This particular fungus thrives in environments characterized by moisture and cool temperatures. Disease progression occurs when temperatures range between approximately 50 to mid 90s oF, creating favorable conditions for the late blight fungus to thrive in the field',
+            medicine: 'If you observe any indications of blight and the potatoes are not fully mature, you can employ Dithane (mancozeb) MZ as a treatment option. Alternatively, you may consider using Tattoo C or Acrobat MZ. When applied later in the season, Acrobat can effectively diminish the presence of late blight spores.',
+            prevention: 'Before the start of the growing season, it is important to eliminate potato cull piles by burying them, spreading and incorporating them into fields, or feeding them to livestock. Controlling volunteer potato plants is crucial as they can grow from infected tubers',
+            link: 'https://www.gov.nl.ca/ffa/files/publications-pdf-fungicide.pdf',
+        },
+    };
 
-          //variable for prediction
-          // const predictedWord = labelMap[predictedLabel].name;
-          // console.log('predictedWord:', predictedWord);
-          const predictedName = labelMap[predictedLabel].name;
-          const predictedDisease = labelMap[predictedLabel].disease;
-          const predictedDescription = labelMap[predictedLabel].description;
-          const predictedeffects = labelMap[predictedLabel].effects;
-          const predictedcause = labelMap[predictedLabel].cause;
-          const predictedmedicine = labelMap[predictedLabel].medicine;
-          const predictedprevention = labelMap[predictedLabel].prevention;
-          const predictedlink = labelMap[predictedLabel].link;
-          console.log('predictedName:', predictedName);
-          console.log('predictedDisease:', predictedDisease);
-          console.log('predictedDescription:', predictedDescription);
-          console.log('predictedeffects:', predictedeffects);
-          console.log('predictedcause:', predictedcause);
-          console.log('predictedmedicine:', predictedmedicine);
-          console.log('predictedprevention:', predictedprevention);
-          console.log('predictedlink:', predictedlink);
+    //variable for prediction
+    // const predictedWord = labelMap[predictedLabel].name;
+    // console.log('predictedWord:', predictedWord);
+    const predictedName = labelMap[predictedLabel].name;
+    const predictedDisease = labelMap[predictedLabel].disease;
+    const predictedDescription = labelMap[predictedLabel].description;
+    const predictedeffects = labelMap[predictedLabel].effects;
+    const predictedcause = labelMap[predictedLabel].cause;
+    const predictedmedicine = labelMap[predictedLabel].medicine;
+    const predictedprevention = labelMap[predictedLabel].prevention;
+    const predictedlink = labelMap[predictedLabel].link;
+    console.log('predictedName:', predictedName);
+    console.log('predictedDisease:', predictedDisease);
+    console.log('predictedDescription:', predictedDescription);
+    console.log('predictedeffects:', predictedeffects);
+    console.log('predictedcause:', predictedcause);
+    console.log('predictedmedicine:', predictedmedicine);
+    console.log('predictedprevention:', predictedprevention);
+    console.log('predictedlink:', predictedlink);
 
-          const url = `http://localhost/ML_Project-2023-/teacheable.php?predictedname=${predictedName}&predicteddisease=${predictedDisease}&predicteddescription=${predictedDescription}&predictedeffects=${predictedeffects}&predictedcause=${predictedcause}&predictedmedicine=${predictedmedicine}&predictedprevention=${predictedprevention}&predictedlink=${predictedlink}`;
+    const url = `http://localhost/ML_Project-2023-/teacheable.php?predictedname=${predictedName}&predicteddisease=${predictedDisease}&predicteddescription=${predictedDescription}&predictedeffects=${predictedeffects}&predictedcause=${predictedcause}&predictedmedicine=${predictedmedicine}&predictedprevention=${predictedprevention}&predictedlink=${predictedlink}`;
 
     fetch(url, { method: 'GET' })
-      .then(response => {
-        // Handle the response
-        console.log('Data inserted successfully!');
-      })
-      .catch(error => {
-        // Handle any errors
-        console.error('Error inserting data:', error);
-      }); 
-    
-  }
+        .then(response => {
+            // Handle the response
+            console.log('Data inserted successfully!');
+        })
+        .catch(error => {
+            // Handle any errors
+            console.error('Error inserting data:', error);
+        });
 
-  // Load image using FileReader
-      function loadImage(file) {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => {
+}
+
+// Load image using FileReader
+function loadImage(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
             const img = new Image();
-    img.onload = () => resolve(tf.browser.fromPixels(img));
-    img.onerror = (error) => reject(error);
-    img.src = reader.result;
-  };
-  reader.readAsDataURL(file);
-});
+            img.onload = () => resolve(tf.browser.fromPixels(img));
+            img.onerror = (error) => reject(error);
+            img.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+    });
 }
