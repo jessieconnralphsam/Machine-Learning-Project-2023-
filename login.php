@@ -98,7 +98,7 @@
 
                 <div class="text-center">
                   
-                  <h2 class="mt-1 mb-5 pb-1" style="font-size: 35px;">Leaf Diseases Detection System With Artificial Intelligence</h2>
+                  <h2 class="mt-1 mb-5 pb-1" style="font-size: 35px;"><i class="fas fa-leaf" style="color: green;"></i><br>Leaf Diseases Detection System With Artificial Intelligence</h2>
                 </div>
 
                 <form id="login-frm" action="" method="post">

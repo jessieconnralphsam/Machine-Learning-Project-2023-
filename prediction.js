@@ -176,7 +176,7 @@ async function predict() {
         14: {
             name: 'Orange',
             disease: 'Haunglongbing',
-            description: "'Huanglongbing is a devastating bacterial disease that affects citrus trees, including oranges. Symptoms of the disease include yellowing and blotchy mottling of leaves, stunted growth, misshapen and bitter-tasting fruits, and a decline in overall tree health.",
+            description: "Huanglongbing is a devastating bacterial disease that affects citrus trees, including oranges. Symptoms of the disease include yellowing and blotchy mottling of leaves, stunted growth, misshapen and bitter-tasting fruits, and a decline in overall tree health.",
             effects: "Huanglongbing can have severe impacts on orange trees. Such leads to reduced fruit production, poor fruit quality, and ultimately, the decline and death of infected trees. The disease can significantly affect the citrus industry by reducing yields and rendering affected fruits unmarketable.",
             cause: "Huanglongbing is primarily transmitted by the Asian citrus psyllid, Diaphorina citri, which is considered an insect vector. These infected psyllids can spread the bacterium to healthy trees by feeding on the sap. The bacterium can also be transmitted through the grafting of infected plant material.",
             medicine: "Currently, there is no known cure or specific treatment for Huanglongbing. Disease management focuses on cultural practices, such as vector control, removing and destroying infected trees, and promoting overall tree health.",

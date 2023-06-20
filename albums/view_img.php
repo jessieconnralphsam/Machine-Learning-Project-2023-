@@ -78,7 +78,7 @@ if (isset($_GET['id']) && $_GET['id'] > 0) {
         <br>
         <br>
         <?php if (isset($link)): ?>
-            <h5 style="font-size: 10px;">Source: <a href="<?php echo $link; ?>" target="_blank"><?php echo $link; ?></a></h5>
+            <h4 style="font-size: 12px;"><a href="<?php echo $link; ?>" target="_blank"><em><?php echo $link; ?></em></a></h4>
         <?php endif; ?>
 
     </div>

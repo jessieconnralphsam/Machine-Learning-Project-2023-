@@ -4,3 +4,11 @@ view_img.php
 teacheable.php
 index.php
 header.php
+
+for auto increment db reset
+ALTER TABLE images AUTO_INCREMENT = 1;
+ALTER TABLE prediction AUTO_INCREMENT = 1;
+
+link of dataset:
+
+https://www.kaggle.com/datasets/dev523/leaf-disease-detection-dataset
